@@ -112,7 +112,7 @@ pub struct ThumbnailerJobStep {
 }
 
 // TOOD(brxken128): validate avci and avcs
-#[cfg(all(feature = "heif", target_os = "macos"))]
+#[cfg(all(feature = "heif", not(target_os = "linux")))]
 const HEIF_EXTENSIONS: [&str; 7] = ["heif", "heifs", "heic", "heics", "avif", "avci", "avcs"];
 
 pub async fn generate_image_thumbnail<P: AsRef<Path>>(
@@ -121,7 +121,7 @@ pub async fn generate_image_thumbnail<P: AsRef<Path>>(
 ) -> Result<(), Box<dyn Error>> {
 	// Webp creation has blocking code
 	let webp = block_in_place(|| -> Result<Vec<u8>, Box<dyn Error>> {
-		#[cfg(all(feature = "heif", target_os = "macos"))]
+		#[cfg(all(feature = "heif", not(target_os = "linux")))]
 		let img = {
 			let ext = file_path
 				.as_ref()
@@ -138,7 +138,7 @@ pub async fn generate_image_thumbnail<P: AsRef<Path>>(
 			}
 		};
 
-		#[cfg(not(all(feature = "heif", target_os = "macos")))]
+		#[cfg(not(all(feature = "heif", not(target_os = "linux"))))]
 		let img = image::open(file_path)?;
 
 		let (w, h) = img.dimensions();
@@ -186,13 +186,13 @@ pub const fn can_generate_thumbnail_for_video(video_extension: &VideoExtension) 
 pub const fn can_generate_thumbnail_for_image(image_extension: &ImageExtension) -> bool {
 	use ImageExtension::*;
 
-	#[cfg(all(feature = "heif", target_os = "macos"))]
+	#[cfg(all(feature = "heif", not(target_os = "linux")))]
 	let res = matches!(
 		image_extension,
 		Jpg | Jpeg | Png | Webp | Gif | Heic | Heics | Heif | Heifs | Avif
 	);
 
-	#[cfg(not(all(feature = "heif", target_os = "macos")))]
+	#[cfg(not(all(feature = "heif", not(target_os = "linux"))))]
 	let res = matches!(image_extension, Jpg | Jpeg | Png | Webp | Gif);
 
 	res

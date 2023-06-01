@@ -92,7 +92,6 @@ tracing-appender = { git = "https://github.com/tokio-rs/tracing", rev = "2914626
 strum = { version = "0.24", features = ["derive"] }
 strum_macros = "0.24"
 
-
 [target.'cfg(windows)'.dependencies.winapi-util]
 version = "0.1.5"
 
