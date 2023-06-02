@@ -6,8 +6,10 @@ use crate::{
 		LocationError, LocationUpdateArgs,
 	},
 	prisma::{file_path, indexer_rule, indexer_rules_in_location, location, object, tag},
-	util::debug_initializer::AbortOnDrop,
 };
+
+#[cfg(debug_assertions)]
+use crate::util::debug_initializer::AbortOnDrop;
 
 use rspc::{self, alpha::AlphaRouter, ErrorCode};
 use serde::{Deserialize, Serialize};
